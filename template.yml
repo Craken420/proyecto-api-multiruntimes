@@ -1,0 +1,65 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: FastAPI on Lambda + NodeJS Fingerprint Lambda
+
+Parameters:
+  IAMRoleForCodeDeploy:
+    Type: String
+    Default: arn:aws:iam::843358133778:role/service-role/taller-14-11-2022-role-yt3h5csx
+  EnvirontmentDeploy:
+    Type: String
+    Default: 'dev'
+
+Resources:
+  PythonLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join ['-', ['BiometricoAPI', 'python', !Ref EnvirontmentDeploy]]
+      CodeUri: routes/python_lambda/
+      Handler: A_GET_Huella.lambda_handler
+      Runtime: python3.12
+      Timeout: 60
+      MemorySize: 2048
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            Path: /huella
+            Method: GET
+            ApiId: !Ref Api
+
+  NodeLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join ['-', ['BiometricoAPI', 'node', !Ref EnvirontmentDeploy]]
+      CodeUri: routes/node_lambda/
+      Handler: A_GET_Lector.handler
+      Runtime: nodejs18.x
+      Timeout: 30
+      MemorySize: 1024
+      Events:
+        ApiLector:
+          Type: HttpApi
+          Properties:
+            Path: /lector
+            Method: GET
+            ApiId: !Ref Api
+
+  Api:
+    Type: AWS::Serverless::HttpApi
+    Name: !Join ['-', ['BiometricoAPI', !Ref EnvirontmentDeploy]]
+    StageName: !Ref EnvirontmentDeploy
+    Properties:
+      CorsConfiguration:
+        AllowOrigins:
+          - '*'
+        AllowHeaders:
+          - '*'
+        AllowMethods:
+          - '*'
+
+Outputs:
+  ApiUrl:
+    Description: URL of your API
+    Value:
+      Fn::Sub: 'https://${Api}.execute-api.${AWS::Region}.${AWS::URLSuffix}/'

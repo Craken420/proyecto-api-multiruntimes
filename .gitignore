@@ -1,0 +1,38 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+*.zip
+
+# SAM build artifacts
+.aws-sam/
+
+# Dependency directories
+node_modules/
+.env/
+.venv/
+venv/
+
+# VSCode or other editor folders
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Python virtual environments
+*.env
+
+# Lambda deployment packages
+*.lambda-package.zip
+
+# Logs
+*.log
+
