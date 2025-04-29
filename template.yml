@@ -11,22 +11,21 @@ Parameters:
     Default: 'dev'
 
 Resources:
-  PythonLambda:
+  FastApiLambda: 
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Join ['-', ['BiometricoAPI', 'python', !Ref EnvirontmentDeploy]]
-      CodeUri: routes/python_lambda/
-      Handler: A_GET_Huella.lambda_handler
+      CodeUri: .
+      Handler: app.handler
       Runtime: python3.12
-      Timeout: 60
-      MemorySize: 2048
+      Timeout: 30
+      MemorySize: 1024
       Events:
-        Api:
-          Type: HttpApi
+        CatchAll:
+          Type: Api
           Properties:
-            Path: /huella
-            Method: GET
-            ApiId: !Ref Api
+            Path: /{proxy+}
+            Method: ANY
 
   NodeLambda:
     Type: AWS::Serverless::Function

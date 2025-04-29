@@ -20,16 +20,11 @@ app.add_middleware(
 @app.get("/")
 def read_root():
     """
-    Endpoint raíz que devuelve una respuesta JSON simple.
+    Endpoint raiz que devuelve una respuesta JSON simple.
     """
     return {"Biometrico": "ok"}
 
-@app.get("/huella")
-def huella():
-    """
-    Endpoint para la ruta '/huella'.
-    """
-    return {"message": "Ruta de huella funcionando"}
+from routes.python_lambda import *
 
 # Configurar Mangum para funcionar con Lambda
 handler = Mangum(app)
